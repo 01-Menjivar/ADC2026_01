@@ -1,0 +1,184 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>Laboratorio 01: Introducción a ensamblador y modos de direccionamiento</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/claat-public/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14" ga4id=""></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  codelab-ga4id=""
+                  id="laboratorio-01-arquitectura"
+                  title="Laboratorio 01: Introducción a ensamblador y modos de direccionamiento"
+                  environment="web"
+                  feedback-link="">
+    
+      <google-codelab-step label="¿Qué es el lenguaje ensamblador?" duration="0">
+        <p>El lenguaje ensamblador es un lenguaje de bajo nivel que se comunica directamente con el hardware de la computadora. A diferencia de los lenguajes de alto nivel como Python o Java, el ensamblador se traduce directamente a código máquina, lo que permite un control preciso sobre la CPU y la memoria.</p>
+<p class="image-container"><img alt="Capa de abstracción" src="img/31bf5e70d9b41f37.svg"></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="¿Qué herramientas necesitamos?" duration="0">
+        <p>Para este laboratorio, utilizaremos las siguientes herramientas:</p>
+<ol type="1">
+<li><strong>NASM (Netwide Assembler):</strong> Un ensamblador de código abierto que convierte el código fuente en lenguaje ensamblador a código máquina ejecutable.</li>
+<li><strong>DOSBox:</strong> Un emulador que recrea el entorno DOS, permitiéndonos ejecutar programas de 16 bits en sistemas operativos modernos.</li>
+</ol>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="¿Por qué necesitamos estas herramientas?" duration="0">
+        <p>Antes de instalar cualquier cosa, es importante entender el problema que cada herramienta resuelve.</p>
+<h2 is-upgraded>El problema: ensamblador x86 en sistemas modernos</h2>
+<p>El lenguaje ensamblador x86 de 16 bits fue diseñado para sistemas operativos como MS-DOS, que se ejecutaban en hardware específico. Las computadoras modernas, sin embargo, utilizan arquitecturas de 64 bits y sistemas operativos que no son compatibles con programas de 16 bits. Esto hace que ejecutar código ensamblador x86 directamente en una máquina moderna sea imposible sin algún tipo de emulación o virtualización.</p>
+<p>Aquí entra <strong>DOSBox</strong>: es un emulador que recrea completo el entorno DOS, incluyendo una CPU virtual de 16 bits, lo que nos permite ejecutar programas escritos para ese sistema operativo sin problemas de compatibilidad.</p>
+<h2 is-upgraded>¿Y NASM?</h2>
+<p>El código ensamblador que escribiremos es texto legible para humanos. Para que la CPU lo pueda ejecutar, ese texto debe convertirse a código máquina (bytes). Eso es exactamente lo que hace un ensamblador: traduce instrucciones simbólicas a binario.</p>
+<h2 is-upgraded>El flujo completo</h2>
+<pre><code>Código .asm  →  NASM  →  Archivo .com  →  DOSBox  →  Ejecución
+(texto)         (ensambla)   (binario)      (emula DOS)
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Configuración del entorno" duration="0">
+        <h2 is-upgraded>Windows</h2>
+<p><strong>1. Descargar e instalar NASM y DOSBox</strong></p>
+<ul>
+<li><strong>NASM:</strong> Descarga el instalador <code>.exe</code> desde <a href="https://www.nasm.us/pub/nasm/releasebuilds/3.01/win64/" target="_blank">nasm.us</a>.</li>
+<li><strong>DOSBox:</strong> Descarga e instala DOSBox desde su sitio oficial en <a href="https://sourceforge.net/projects/dosbox/files/dosbox/0.74-3/DOSBox0.74-3-win32-installer.exe/download" target="_blank">dosbox.com</a>.</li>
+</ul>
+<p><strong>¡Importante!</strong> Durante el proceso de instalación de ambas herramientas, haremos una pausa en la pantalla donde se elige el directorio de destino y guardaremos ambas rutas de instalación para cada programa. Las necesitaremos en el siguiente paso.</p>
+<p class="image-container"><img alt="Ruta de instalación DOSBox" src="img/d0c06450ff16abf8.png"></p>
+<p class="image-container"><img alt="Ruta de instalación NASM" src="img/d8b5774ba2ab66ec.png"></p>
+<p><strong>2. Configurar las variables de entorno</strong></p>
+<p>Una vez instalados ambos programas, debemos agregar sus rutas de instalación a las variables de entorno del sistema (específicamente a la variable <strong>PATH</strong>) para poder ejecutarlos directamente desde cualquier terminal.</p>
+<ol type="1">
+<li>Abre el menú Inicio y busca &#34;Variables de entorno&#34;. Selecciona &#34;Editar las variables de entorno del sistema&#34;.</li>
+<li>En la ventana que aparece, haz clic en el botón &#34;Variables de entorno...&#34;.</li>
+</ol>
+<p class="image-container"><img alt="Variables de entorno" src="img/4ad6d8b08c487632.png"></p>
+<ol type="1" start="3">
+<li>Busca la variable <strong>Path</strong> en la lista de variables del sistema o de usuario, selecciónala y haz clic en &#34;Editar&#34;.</li>
+<li>Agrega las dos rutas que guardaste durante la instalación (la de NASM y la de DOSBox).</li>
+</ol>
+<p class="image-container"><img alt="Configuración del PATH" src="img/4487fef9ec7ce7c8.png"></p>
+<h2 is-upgraded>macOS y Linux</h2>
+<p><strong>1. Instalar NASM y DOSBox</strong></p>
+<p>Para macOS (usando Homebrew):</p>
+<pre><code language="language-bash" class="language-bash">brew install nasm
+brew install --cask dosbox
+</code></pre>
+<p>Para distribuciones de Linux basadas en Ubuntu/Debian:</p>
+<pre><code language="language-bash" class="language-bash">sudo apt update
+sudo apt install nasm dosbox
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Preparar entorno de trabajo" duration="0">
+        <p>Los siguientes pasos aplican por igual sin importar el sistema operativo (Windows, macOS o Linux).</p>
+<h2 is-upgraded>1. Montar la carpeta de trabajo</h2>
+<p>Para trabajar de manera cómoda, crea una carpeta para tus archivos de ensamblador.</p>
+<p>El comando <code>dosbox .</code> abrirá DOSBox con el directorio de tu terminal montado automáticamente como la unidad <code>C:</code>, por lo que la forma recomendada y más sencilla de abrir tu entorno es navegando desde tu terminal hasta la carpeta del proyecto que acabas de crear y ejecutando:</p>
+<pre><code language="language-bash" class="language-bash">dosbox .
+</code></pre>
+<p><strong>Alternativa manual:</strong> Solo en caso de que el comando anterior desde la terminal no funcione de manera automática para ti, abre la aplicación de DOSBox directamente y ejecuta los siguientes comandos para montar tu carpeta de forma manual (cambiando la ruta de ejemplo por la ubicación real de tu proyecto):</p>
+<pre><code>mount c ruta/a/tu/carpeta/ensamblador
+c:
+</code></pre>
+<h2 is-upgraded>2. Instalar la extensión de NASM en VS Code</h2>
+<p>Busca <strong>&#34;NASM&#34;</strong> en el marketplace de extensiones de VS Code e instala la extensión para el resaltado de sintaxis.</p>
+<p class="image-container"><img alt="Extension" src="img/d91fa5f4a246992e.png"></p>
+<h2 is-upgraded>Sintaxis</h2>
+<p>El lenguaje ensamblador X86 tiene una estructura específica. Sus componentes principales son:</p>
+<ol type="1">
+<li><strong>Directivas:</strong> Comandos que le indican al ensamblador cómo procesar el código. No son ejecutadas por la CPU, sino que preparan el entorno de ejecución. Pueden definir constantes, reservar espacio en memoria o controlar el proceso de ensamblaje.</li>
+<li><strong>Secciones:</strong> El código y los datos se organizan en secciones:<ul>
+<li><code>section .text</code>: La sección principal donde se escribe el código ejecutable.</li>
+<li><code>section .data</code>: Usada para declarar variables estáticas o constantes que no cambian durante la ejecución.</li>
+</ul>
+</li>
+<li><strong>Etiquetas:</strong> Identificadores que marcan puntos específicos en el código, como el inicio de una función o un bucle. Pueden ser referenciadas por instrucciones de salto y llamadas a funciones.</li>
+<li><strong>Instrucciones:</strong> Comandos que el procesador ejecuta directamente, como operaciones aritméticas, manejo de datos y control de flujo.</li>
+<li><strong>Operandos:</strong> Los valores con los que trabajan las instrucciones. Pueden ser valores inmediatos, registros o ubicaciones de memoria.</li>
+</ol>
+<p class="image-container"><img alt="Sintaxtis" src="img/31688d5f34b8f87e.jpeg"></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Pasos para la compilación y DEBUG" duration="0">
+        <p><strong>1.</strong> Guardar el código en un archivo con extensión <code>.asm</code>.</p>
+<p><strong>2.</strong> Ensamblar el archivo con NASM ejecutando:</p>
+<pre><code language="language-bash" class="language-bash">nasm -f bin &lt;nombre&gt;.asm -o &lt;nombre&gt;.com
+</code></pre>
+<p>Este comando genera un archivo ejecutable con extensión <code>.com</code>.</p>
+<p><strong>3.</strong> Abrir DOSBox desde la terminal con:</p>
+<pre><code language="language-bash" class="language-bash">dosbox .
+</code></pre>
+<p><strong>4.</strong> Dentro de DOSBox, cargar el programa en el depurador:</p>
+<pre><code language="language-bash" class="language-bash">debug.exe &lt;nombre&gt;.com
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Comandos útiles para DEBUG" duration="0">
+        <table>
+<tr><td colspan="1" rowspan="1"><p>Comando</p>
+</td><td colspan="1" rowspan="1"><p>Descripción</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p><code>r</code></p>
+</td><td colspan="1" rowspan="1"><p>Muestra el estado actual de los registros de la CPU.</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p><code>t</code></p>
+</td><td colspan="1" rowspan="1"><p>Ejecuta una sola instrucción (paso a paso).</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p><code>t n</code></p>
+</td><td colspan="1" rowspan="1"><p>Ejecuta <code>n</code> instrucciones seguidas.</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p><code>g</code></p>
+</td><td colspan="1" rowspan="1"><p>Ejecuta el programa completo hasta un punto de interrupción o hasta que finalice.</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p><code>d 200</code></p>
+</td><td colspan="1" rowspan="1"><p>Muestra el contenido de la memoria en la dirección <code>200h</code>.</p>
+</td></tr>
+<tr><td colspan="1" rowspan="1"><p><code>q</code></p>
+</td><td colspan="1" rowspan="1"><p>Sale del depurador y regresa al prompt de DOSBox.</p>
+</td></tr>
+</table>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/claat-public/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/prettify.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+</body>
+</html>
