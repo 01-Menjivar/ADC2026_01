@@ -179,6 +179,14 @@ c:
   <script src="https://storage.googleapis.com/claat-public/prettify.js"></script>
   <script src="https://storage.googleapis.com/claat-public/codelab-elements.js"></script>
   <script src="//support.google.com/inapp/api.js"></script>
+  <script>
+  const fabs = document.querySelector("#fabs");
+  const done = document.querySelector("#done");
+  const codelabNavButtons = document.querySelector("#codelab-nav-buttons");
+  const arrowBack = document.querySelector("#arrow-back");
+  if (fabs && done) fabs.removeChild(done);
+  if (codelabNavButtons && arrowBack) codelabNavButtons.removeChild(arrowBack);
+</script>
 
 </body>
 </html>
