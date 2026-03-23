@@ -110,8 +110,12 @@ c:
 <h2 is-upgraded>2. Instalar la extensión de NASM en VS Code</h2>
 <p>Busca <strong>&#34;NASM&#34;</strong> en el marketplace de extensiones de VS Code e instala la extensión para el resaltado de sintaxis.</p>
 <p class="image-container"><img alt="Extension" src="img/d91fa5f4a246992e.png"></p>
-<h2 is-upgraded>Sintaxis</h2>
-<p>El lenguaje ensamblador X86 tiene una estructura específica. Sus componentes principales son:</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Sintaxis" duration="0">
+        <p>El lenguaje ensamblador X86 tiene una estructura específica. Sus componentes principales son:</p>
 <ol type="1">
 <li><strong>Directivas:</strong> Comandos que le indican al ensamblador cómo procesar el código. No son ejecutadas por la CPU, sino que preparan el entorno de ejecución. Pueden definir constantes, reservar espacio en memoria o controlar el proceso de ensamblaje.</li>
 <li><strong>Secciones:</strong> El código y los datos se organizan en secciones:<ul>
@@ -128,8 +132,9 @@ c:
 
       </google-codelab-step>
     
-      <google-codelab-step label="Pasos para la compilación y DEBUG" duration="0">
-        <p><strong>1.</strong> Guardar el código en un archivo con extensión <code>.asm</code>.</p>
+      <google-codelab-step label="Compilación y DEBUG" duration="0">
+        <h2 is-upgraded>Pasos para la compilación y DEBUG</h2>
+<p><strong>1.</strong> Guardar el código en un archivo con extensión <code>.asm</code>.</p>
 <p><strong>2.</strong> Ensamblar el archivo con NASM ejecutando:</p>
 <pre><code language="language-bash" class="language-bash">nasm -f bin &lt;nombre&gt;.asm -o &lt;nombre&gt;.com
 </code></pre>
@@ -140,12 +145,8 @@ c:
 <p><strong>4.</strong> Dentro de DOSBox, cargar el programa en el depurador:</p>
 <pre><code language="language-bash" class="language-bash">debug.exe &lt;nombre&gt;.com
 </code></pre>
-
-
-      </google-codelab-step>
-    
-      <google-codelab-step label="Comandos útiles para DEBUG" duration="0">
-        <table>
+<h2 is-upgraded>Comandos útiles para DEBUG</h2>
+<table>
 <tr><td colspan="1" rowspan="1"><p>Comando</p>
 </td><td colspan="1" rowspan="1"><p>Descripción</p>
 </td></tr>
@@ -186,7 +187,7 @@ c:
   const arrowBack = document.querySelector("#arrow-back");
   if (fabs && done) fabs.removeChild(done);
   if (codelabNavButtons && arrowBack) codelabNavButtons.removeChild(arrowBack);
-</script>
+  </script>
 
 </body>
 </html>
