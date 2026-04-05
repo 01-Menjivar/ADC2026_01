@@ -132,6 +132,95 @@ c:
 
       </google-codelab-step>
     
+      <google-codelab-step label="Registros de datos" duration="0">
+        <p>Son componentes fundamentales para operaciones aritméticas y almacenamiento temporal. Cada registro es de 16 bits, pero puede dividirse en dos subregistros independientes de 8 bits (parte alta y parte baja). Residen en la Unidad de Ejecución (EU):</p>
+<p class="image-container"><img alt="Registros" src="img/f0755d32de9a5fa4.jpeg"></p>
+<ol type="1">
+<li><strong>AX (Acumulador):</strong> Principal registro de trabajo. Almacena resultados de operaciones aritméticas.</li>
+<li><strong>BX (Registro Base):</strong> Usado para direccionamiento de memoria. Indica dónde almacenar o recuperar datos.</li>
+<li><strong>CX (Contador):</strong> Lleva el conteo en ciclos (bucles) y almacena datos temporalmente.</li>
+<li><strong>DX (Registro de Datos):</strong> Maneja operandos/resultados en multiplicaciones y divisiones. También almacena direcciones de entrada/salida (E/S).</li>
+</ol>
+<p>Además de estos, existen registros índice y punteros clave para ubicar datos en memoria: 5. <strong>SI (Índice Fuente):</strong> Utilizado principalmente como puntero para leer datos desde la memoria (ej. al recorrer arreglos o cadenas). 6. <strong>BP (Puntero Base):</strong> Usado para direccionamiento indirecto, comúnmente para acceder a datos estructurados o parámetros pasados por la pila (stack).</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Direccionamiento: Instrucción 
+MOV" duration="0">
+        <h2 is-upgraded><strong>Concepto de Direccionamiento</strong></h2>
+<p>Define cómo se accede a los operandos (registros, memoria o valores inmediatos) necesarios para ejecutar una instrucción.</p>
+<h2 is-upgraded><strong>Instrucción MOV</strong></h2>
+<p>Es la instrucción básica para copiar datos de un origen a un destino. Sintaxis general:</p>
+<pre><code language="language-nasm" class="language-nasm">MOV destino, fuente
+</code></pre>
+<p><em>Nota: El </em></p>
+<p><em><code>destino</code></em></p>
+<p><em> no puede ser un valor inmediato; debe ser un registro o dirección de memoria.</em></p>
+<h2 is-upgraded><strong>Directivas de Tamaño</strong></h2>
+<p>Permiten especificar el tamaño de los datos con los que se trabaja, previniendo errores de acceso a memoria:</p>
+<ul>
+<li><strong>byte:</strong> 1 byte (8 bits).</li>
+<li><strong>word:</strong> 2 bytes (16 bits).</li>
+<li><strong>dword:</strong> 4 bytes (32 bits).</li>
+</ul>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Modos de direccionamiento" duration="0">
+        <p>Especifican cómo una instrucción obtiene sus operandos, afectando la flexibilidad y eficiencia del código. Sus principales modos son:</p>
+<h2 is-upgraded>1. Direccionamiento inmediato</h2>
+<p>El operando es un valor constante (literal) codificado directamente en la instrucción. Tipos de datos soportados:</p>
+<ul>
+<li><strong>Decimales:</strong></li>
+</ul>
+<pre><code language="language-nasm" class="language-nasm">MOV AH, 12d ; Carga 12 en la parte alta de AX
+</code></pre>
+<ul>
+<li><strong>Hexadecimales:</strong></li>
+</ul>
+<pre><code language="language-nasm" class="language-nasm">MOV AL, 14ECh ; Carga 14EC en AL
+MOV AL, 0FFh  ; Valores que inician con letra deben llevar un cero antepuesto
+</code></pre>
+<ul>
+<li><strong>Binarios:</strong></li>
+</ul>
+<pre><code language="language-nasm" class="language-nasm">MOV BH, 10010b
+</code></pre>
+<ul>
+<li><strong>Caracteres:</strong></li>
+</ul>
+<pre><code language="language-nasm" class="language-nasm">MOV BL, &#34;A&#34; ; Carga el código ASCII de &#34;A&#34;
+</code></pre>
+<aside class="special"><p> 💡 Las letras <strong>d</strong>, <strong>h</strong> y <strong>b</strong> al final indican el sistema de numeración utilizado. </p>
+</aside>
+<h2 is-upgraded>2. Direccionamiento por registro</h2>
+<p>Transfiere datos entre registros. La fuente conserva su valor original y el destino lo copia. <strong>Ambos registros deben tener el mismo tamaño.</strong></p>
+<pre><code language="language-nasm" class="language-nasm">MOV CX, AX ; CX copia el valor que AX tiene
+</code></pre>
+<h2 is-upgraded>3. Direccionamiento absoluto</h2>
+<p>Usa direcciones de memoria directas (entre corchetes) como fuente o destino. Cada dirección almacena 1 byte de información.</p>
+<pre><code language="language-nasm" class="language-nasm">MOV [200h], CH ; de registro a memoria
+MOV AH, [200h] ; de memoria a registro
+</code></pre>
+<p>Para valores mayores a 1 byte, se usa notación <em>little endian</em> (los bytes excedentes van a las direcciones siguientes):</p>
+<pre><code language="language-nasm" class="language-nasm">; Si DX = 1241h
+MOV [210h], DX ; 41h se guarda en [210h] y 12h en [211h]
+MOV BX, [210h] ; BX copia el valor 1241h de la memoria
+</code></pre>
+<p><em>Importante: </em></p>
+<p><em><code>MOV</code></em></p>
+<p><em> no permite usar dos direcciones de memoria al mismo tiempo. Siempre usa un registro como intermediario.</em></p>
+<h2 is-upgraded>4. Direccionamiento indirecto</h2>
+<p>Accede a los datos usando un registro base o índice (<code>BX</code>, <code>BP</code>, <code>SI</code>, <code>DI</code>) que contiene la dirección de memoria. Es ideal para arrays o acceso dinámico.</p>
+<pre><code language="language-nasm" class="language-nasm">MOV BP, 210h ; Almacena la dirección de memoria a acceder
+MOV AL, [BP] ; Obtiene el valor guardado en la dirección [210h] y lo mueve a AL
+</code></pre>
+
+
+      </google-codelab-step>
+    
       <google-codelab-step label="Compilación y DEBUG" duration="0">
         <h2 is-upgraded>Pasos para la compilación y DEBUG</h2>
 <p><strong>1.</strong> Guardar el código en un archivo con extensión <code>.asm</code>.</p>
@@ -173,6 +262,39 @@ c:
 
       </google-codelab-step>
     
+      <google-codelab-step label="Ejercicios Prácticos" duration="0">
+        <p>A continuación, se presentan 2 ejercicios diseñados para poner en práctica los conceptos de este laboratorio. Escribe el código en un archivo <code>.asm</code>, ensámblalo y utiliza <code>debug.exe</code> en DOSBox para verificar los resultados paso a paso.</p>
+<h2 is-upgraded>Ejercicio 1: Manipulación de subregistros y conversión entre sistemas numéricos</h2>
+<p><strong>Objetivo:</strong> Dominar el manejo de subregistros, conversión entre sistemas numéricos y transferencias de datos complejas. <strong>Instrucciones:</strong></p>
+<ol type="1">
+<li>Carga el valor hexadecimal <code>F3h</code> en <code>AL</code> y <code>2Dh</code> en <code>AH</code>, formando así <code>AX = 2DF3h</code>.</li>
+<li>Copia el contenido completo de <code>AX</code> al registro <code>BX</code>.</li>
+<li>Ahora mueve solo la parte alta de <code>BX</code> al registro <code>CL</code>.</li>
+<li>Convierte el valor de <code>CL</code> a decimal y luego a binario, almacenando cada resultado en <code>DL</code> y <code>DH</code> respectivamente.</li>
+<li>Finalmente, verifica el estado de los registros con <code>r</code> en el depurador para confirmar que los valores se han transferido y convertido correctamente.</li>
+</ol>
+<h2 is-upgraded>Ejercicio 2: Almacenamiento y recuperación de datos en memoria con formato little endian</h2>
+<p><strong>Objetivo:</strong> Comprender el formato <em>little endian</em>, trabajar con múltiples datos en memoria y utilizar <code>bp</code> como puntero base. <strong>Instrucciones:</strong></p>
+<ol type="1">
+<li>Almacena los siguientes 3 valores en memoria consecutiva a partir de <code>0300h</code>: <ul>
+<li><code>5C7Eh</code> en <code>[0300h]</code></li>
+<li><code>9AB2h</code> en <code>[0302h]</code></li>
+<li><code>0F01h</code> en <code>[0304h]</code></li>
+</ul>
+</li>
+<li>Configura <code>bp</code> para apuntar a la dirección base <code>0300h</code>.</li>
+<li>Usa <code>bp</code> con desplazamientos para recuperar los bytes individuales de las tres palabras almacenadas y muévelos a los registros <code>AX</code>, <code>BX</code> y <code>CX</code> de la siguiente manera: <ul>
+<li>El byte de menor peso de la primera palabra a <code>AL</code> y el byte de mayor peso a <code>AH</code> (formando <code>AX</code>).</li>
+<li>El byte de menor peso de la segunda palabra a <code>BL</code> y el byte de mayor peso a <code>BH</code> (formando <code>BX</code>).</li>
+<li>El byte de menor peso de la tercera palabra a <code>CL</code> y el byte de mayor peso a <code>CH</code> (formando <code>CX</code>).</li>
+</ul>
+</li>
+<li>Verifica en el depurador con <code>d 300</code> que los valores en memoria muestren el patrón <em>little endian</em>.</li>
+</ol>
+
+
+      </google-codelab-step>
+    
   </google-codelab>
 
   <script src="https://storage.googleapis.com/claat-public/native-shim.js"></script>
@@ -180,14 +302,6 @@ c:
   <script src="https://storage.googleapis.com/claat-public/prettify.js"></script>
   <script src="https://storage.googleapis.com/claat-public/codelab-elements.js"></script>
   <script src="//support.google.com/inapp/api.js"></script>
-  <script>
-  const fabs = document.querySelector("#fabs");
-  const done = document.querySelector("#done");
-  const codelabNavButtons = document.querySelector("#codelab-nav-buttons");
-  const arrowBack = document.querySelector("#arrow-back");
-  if (fabs && done) fabs.removeChild(done);
-  if (codelabNavButtons && arrowBack) codelabNavButtons.removeChild(arrowBack);
-  </script>
 
 </body>
 </html>

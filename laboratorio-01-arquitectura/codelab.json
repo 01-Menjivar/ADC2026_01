@@ -3,13 +3,13 @@
   "format": "html",
   "prefix": "https://storage.googleapis.com",
   "mainga": "UA-49880327-14",
-  "updated": "2026-03-23T08:36:40-06:00",
+  "updated": "2026-03-31T19:03:08-06:00",
   "id": "laboratorio-01-arquitectura",
   "duration": 0,
   "title": "Laboratorio 01: Introducción a ensamblador y modos de direccionamiento",
   "authors": "Oscar Ayala",
   "summary": "Laboratorio 01 - Introducción a ensamblador y métodos de direccionamiento",
-  "source": "/Users/macbook/labosArqui/readme.md",
+  "source": "readme.md",
   "theme": "",
   "status": [
     "published"
