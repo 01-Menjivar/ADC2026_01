@@ -140,8 +140,9 @@ c:
 <li><strong>BX (Registro Base):</strong> Usado para direccionamiento de memoria. Indica dónde almacenar o recuperar datos.</li>
 <li><strong>CX (Contador):</strong> Lleva el conteo en ciclos (bucles) y almacena datos temporalmente.</li>
 <li><strong>DX (Registro de Datos):</strong> Maneja operandos/resultados en multiplicaciones y divisiones. También almacena direcciones de entrada/salida (E/S).</li>
+<li><strong>SI (Índice de Fuente) y DI (Índice de Destino):</strong> Utilizados para operaciones con cadenas y direccionamiento indirecto.</li>
+<li><strong>BP (Base Pointer):</strong> Usado para direccionamiento indirecto en la pila (stack), especialmente en funciones.</li>
 </ol>
-<p>Además de estos, existen registros índice y punteros clave para ubicar datos en memoria: 5. <strong>SI (Índice Fuente):</strong> Utilizado principalmente como puntero para leer datos desde la memoria (ej. al recorrer arreglos o cadenas). 6. <strong>BP (Puntero Base):</strong> Usado para direccionamiento indirecto, comúnmente para acceder a datos estructurados o parámetros pasados por la pila (stack).</p>
 
 
       </google-codelab-step>
@@ -154,9 +155,8 @@ MOV" duration="0">
 <p>Es la instrucción básica para copiar datos de un origen a un destino. Sintaxis general:</p>
 <pre><code language="language-nasm" class="language-nasm">MOV destino, fuente
 </code></pre>
-<p><em>Nota: El </em></p>
-<p><em><code>destino</code></em></p>
-<p><em> no puede ser un valor inmediato; debe ser un registro o dirección de memoria.</em></p>
+<aside class="warning"><p> Nota: El `destino` no puede ser un valor inmediato; debe ser un registro o dirección de memoria. </p>
+</aside>
 <h2 is-upgraded><strong>Directivas de Tamaño</strong></h2>
 <p>Permiten especificar el tamaño de los datos con los que se trabaja, previniendo errores de acceso a memoria:</p>
 <ul>
@@ -209,9 +209,8 @@ MOV AH, [200h] ; de memoria a registro
 MOV [210h], DX ; 41h se guarda en [210h] y 12h en [211h]
 MOV BX, [210h] ; BX copia el valor 1241h de la memoria
 </code></pre>
-<p><em>Importante: </em></p>
-<p><em><code>MOV</code></em></p>
-<p><em> no permite usar dos direcciones de memoria al mismo tiempo. Siempre usa un registro como intermediario.</em></p>
+<aside class="warning"><p> Importante: `MOV` no permite usar dos direcciones de memoria al mismo tiempo. Siempre usa un registro como intermediario. </p>
+</aside>
 <h2 is-upgraded>4. Direccionamiento indirecto</h2>
 <p>Accede a los datos usando un registro base o índice (<code>BX</code>, <code>BP</code>, <code>SI</code>, <code>DI</code>) que contiene la dirección de memoria. Es ideal para arrays o acceso dinámico.</p>
 <pre><code language="language-nasm" class="language-nasm">MOV BP, 210h ; Almacena la dirección de memoria a acceder
