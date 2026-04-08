@@ -35,22 +35,18 @@
 
       </google-codelab-step>
     
-      <google-codelab-step label="¿Qué herramientas necesitamos?" duration="0">
+      <google-codelab-step label="¿Qué herramientas necesitamos y por qué?" duration="0">
         <p>Para este laboratorio, utilizaremos las siguientes herramientas:</p>
 <ol type="1">
 <li><strong>NASM (Netwide Assembler):</strong> Un ensamblador de código abierto que convierte el código fuente en lenguaje ensamblador a código máquina ejecutable.</li>
 <li><strong>DOSBox:</strong> Un emulador que recrea el entorno DOS, permitiéndonos ejecutar programas de 16 bits en sistemas operativos modernos.</li>
 </ol>
-
-
-      </google-codelab-step>
-    
-      <google-codelab-step label="¿Por qué necesitamos estas herramientas?" duration="0">
-        <p>Antes de instalar cualquier cosa, es importante entender el problema que cada herramienta resuelve.</p>
+<p>Antes de instalar cualquier herramienta, es importante entender el problema que cada una resuelve.</p>
 <h2 is-upgraded>El problema: ensamblador x86 en sistemas modernos</h2>
-<p>El lenguaje ensamblador x86 de 16 bits fue diseñado para sistemas operativos como MS-DOS, que se ejecutaban en hardware específico. Las computadoras modernas, sin embargo, utilizan arquitecturas de 64 bits y sistemas operativos que no son compatibles con programas de 16 bits. Esto hace que ejecutar código ensamblador x86 directamente en una máquina moderna sea imposible sin algún tipo de emulación o virtualización.</p>
-<p>Aquí entra <strong>DOSBox</strong>: es un emulador que recrea completo el entorno DOS, incluyendo una CPU virtual de 16 bits, lo que nos permite ejecutar programas escritos para ese sistema operativo sin problemas de compatibilidad.</p>
-<h2 is-upgraded>¿Y NASM?</h2>
+<p>El lenguaje ensamblador x86 de 16 bits fue diseñado para sistemas operativos como MS-DOS, que se ejecutaban en hardware específico. Las computadoras modernas, en cambio, utilizan arquitecturas de 64 bits y sistemas operativos que no son compatibles con programas de 16 bits. Esto hace que ejecutar código ensamblador x86 directamente en una máquina moderna sea imposible sin algún tipo de emulación o virtualización.</p>
+<h2 is-upgraded>¿Qué hace DOSBox?</h2>
+<p>DOSBox es un emulador que recrea el entorno DOS completo, incluyendo una CPU virtual de 16 bits, lo que nos permite ejecutar programas escritos para ese sistema operativo sin problemas de compatibilidad.</p>
+<h2 is-upgraded>¿Qué hace NASM?</h2>
 <p>El código ensamblador que escribiremos es texto legible para humanos. Para que la CPU lo pueda ejecutar, ese texto debe convertirse a código máquina (bytes). Eso es exactamente lo que hace un ensamblador: traduce instrucciones simbólicas a binario.</p>
 <h2 is-upgraded>El flujo completo</h2>
 <pre><code>Código .asm  →  NASM  →  Archivo .com  →  DOSBox  →  Ejecución
@@ -148,14 +144,14 @@ c:
       </google-codelab-step>
     
       <google-codelab-step label="Direccionamiento: Instrucción 
-MOV" duration="0">
+MOV y direcciones en memoria" duration="0">
         <h2 is-upgraded><strong>Concepto de Direccionamiento</strong></h2>
-<p>Define cómo se accede a los operandos (registros, memoria o valores inmediatos) necesarios para ejecutar una instrucción.</p>
+<p>Se define como la forma en que una instrucción accede a sus operandos que pueden ser registros o ubicaciones de memoria.</p>
 <h2 is-upgraded><strong>Instrucción MOV</strong></h2>
 <p>Es la instrucción básica para copiar datos de un origen a un destino. Sintaxis general:</p>
 <pre><code language="language-nasm" class="language-nasm">MOV destino, fuente
 </code></pre>
-<aside class="warning"><p> Nota: El `destino` no puede ser un valor inmediato; debe ser un registro o dirección de memoria. </p>
+<aside class="warning"><p> Nota: El destino no puede ser un valor inmediato; debe ser un registro o dirección de memoria. (Una direccion de memoria se indica con corchetes, por ejemplo: [200h]). </p>
 </aside>
 <h2 is-upgraded><strong>Directivas de Tamaño</strong></h2>
 <p>Permiten especificar el tamaño de los datos con los que se trabaja, previniendo errores de acceso a memoria:</p>
@@ -164,6 +160,10 @@ MOV" duration="0">
 <li><strong>word:</strong> 2 bytes (16 bits).</li>
 <li><strong>dword:</strong> 4 bytes (32 bits).</li>
 </ul>
+<p>Normalmente ensamblador puede inferir el tamaño del operando a partir del contexto, pero en casos de ambigüedad es necesario usar estas directivas para aclarar al ensamblador qué tipo de dato se está manejando.</p>
+<p>Por ejemplo, al mover un valor inmediato a una dirección de memoria, el ensamblador no puede determinar si se trata de un byte o una word, por lo que es necesario especificarlo:</p>
+<pre><code language="language-nasm" class="language-nasm">MOV word [200h], 0FFh ; Especifica que se mueve una word
+</code></pre>
 
 
       </google-codelab-step>
@@ -207,14 +207,16 @@ MOV AH, [200h] ; de memoria a registro
 <p>Para valores mayores a 1 byte, se usa notación <em>little endian</em> (los bytes excedentes van a las direcciones siguientes):</p>
 <pre><code language="language-nasm" class="language-nasm">; Si DX = 1241h
 MOV [210h], DX ; 41h se guarda en [210h] y 12h en [211h]
-MOV BX, [210h] ; BX copia el valor 1241h de la memoria
 </code></pre>
-<aside class="warning"><p> Importante: `MOV` no permite usar dos direcciones de memoria al mismo tiempo. Siempre usa un registro como intermediario. </p>
+<aside class="warning"><p> Importante: MOV no permite usar dos direcciones de memoria al mismo tiempo. Siempre usa un registro como intermediario. </p>
 </aside>
 <h2 is-upgraded>4. Direccionamiento indirecto</h2>
 <p>Accede a los datos usando un registro base o índice (<code>BX</code>, <code>BP</code>, <code>SI</code>, <code>DI</code>) que contiene la dirección de memoria. Es ideal para arrays o acceso dinámico.</p>
 <pre><code language="language-nasm" class="language-nasm">MOV BP, 210h ; Almacena la dirección de memoria a acceder
 MOV AL, [BP] ; Obtiene el valor guardado en la dirección [210h] y lo mueve a AL
+</code></pre>
+<p>También se puede usar un desplazamiento para acceder a posiciones relativas:</p>
+<pre><code language="language-nasm" class="language-nasm">MOV AL, [BP+1] ; Accede a la dirección BP + 1
 </code></pre>
 
 
