@@ -56,7 +56,7 @@
 
       </google-codelab-step>
     
-      <google-codelab-step label="Configuración del entorno" duration="0">
+      <google-codelab-step label="Instalación y configuración de herramientas" duration="0">
         <h2 is-upgraded>Windows</h2>
 <p><strong>1. Descargar e instalar NASM y DOSBox</strong></p>
 <ul>
@@ -88,24 +88,6 @@ brew install --cask dosbox
 <pre><code language="language-bash" class="language-bash">sudo apt update
 sudo apt install nasm dosbox
 </code></pre>
-
-
-      </google-codelab-step>
-    
-      <google-codelab-step label="Preparar entorno de trabajo" duration="0">
-        <p>Los siguientes pasos aplican por igual sin importar el sistema operativo (Windows, macOS o Linux).</p>
-<h2 is-upgraded>1. Montar la carpeta de trabajo</h2>
-<p>Para trabajar de manera cómoda, crea una carpeta para tus archivos de ensamblador.</p>
-<p>El comando <code>dosbox .</code> abrirá DOSBox con el directorio de tu terminal montado automáticamente como la unidad <code>C:</code>, por lo que la forma recomendada y más sencilla de abrir tu entorno es navegando desde tu terminal hasta la carpeta del proyecto que acabas de crear y ejecutando:</p>
-<pre><code language="language-bash" class="language-bash">dosbox .
-</code></pre>
-<p><strong>Alternativa manual:</strong> Solo en caso de que el comando anterior desde la terminal no funcione de manera automática para ti, abre la aplicación de DOSBox directamente y ejecuta los siguientes comandos para montar tu carpeta de forma manual (cambiando la ruta de ejemplo por la ubicación real de tu proyecto):</p>
-<pre><code>mount c ruta/a/tu/carpeta/ensamblador
-c:
-</code></pre>
-<h2 is-upgraded>2. Instalar la extensión de NASM en VS Code</h2>
-<p>Busca <strong>&#34;NASM&#34;</strong> en el marketplace de extensiones de VS Code e instala la extensión para el resaltado de sintaxis.</p>
-<p class="image-container"><img alt="Extension" src="img/d91fa5f4a246992e.png"></p>
 
 
       </google-codelab-step>
